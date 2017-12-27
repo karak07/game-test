@@ -29,17 +29,28 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Explode();
 
-	UParticleSystemComponent* ExplosionParticleSystem;
+public:
+	/** Broadcasts whenever the bomb explodes */
+	DECLARE_EVENT(ABombBase, FExplodedEvent)
+	FExplodedEvent& OnExploded() { return ExplodedEvent; }
+
+	UFUNCTION()
+	void SetBombRange(int NewRange);
+
 private:
+	/** Broadcasts whenever the bomb explodes */
+	FExplodedEvent ExplodedEvent;
+
 	UFUNCTION()
 	void OnFinished(UParticleSystemComponent* PSystem);
 
 	//Helper to get static mesh component defined in Editor
 	USceneComponent* GetStaticMeshComponent();
+
+	UParticleSystemComponent* ExplosionParticleSystem;
+
+	int BombRange;
 };

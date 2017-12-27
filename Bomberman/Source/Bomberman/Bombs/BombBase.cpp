@@ -27,14 +27,11 @@ USceneComponent* ABombBase::GetStaticMeshComponent()
 void ABombBase::BeginPlay()
 {
 	Super::BeginPlay();
-	ExplosionParticleSystem->AttachToComponent(GetStaticMeshComponent(), FAttachmentTransformRules::KeepWorldTransform);
 }
 
-// Called every frame
-void ABombBase::Tick(float DeltaTime)
+void ABombBase::SetBombRange(int NewRange)
 {
-	Super::Tick(DeltaTime);
-
+	BombRange = NewRange;
 }
 
 void ABombBase::Explode_Implementation()
@@ -42,6 +39,7 @@ void ABombBase::Explode_Implementation()
 	ExplosionParticleSystem->ActivateSystem();
 	GetStaticMeshComponent()->SetVisibility(false);
 	SetActorEnableCollision(false);
+	ExplodedEvent.Broadcast();
 
 	FName ExplosionTrace(TEXT("ExplosionTrace"));
 	FCollisionQueryParams ExplosionTraceParams = FCollisionQueryParams(ExplosionTrace, false, this);
@@ -49,7 +47,6 @@ void ABombBase::Explode_Implementation()
 
 	TArray<FHitResult> Hits;
 	FVector DirVectors[] = { /*Up*/ FVector(1.0f, 0.0f, 0.0f), /*Down*/ FVector(-1.0f, 0.0f, 0.0f), /*Left*/ FVector(0.0f, -1.0f, 0.0f), /*Right*/ FVector(0.0f, 1.0f, 0.0f) };
-	float BombRange = 500.0f;
 
 	for (FVector DirVector : DirVectors)
 	{
@@ -57,7 +54,7 @@ void ABombBase::Explode_Implementation()
 		GetWorld()->LineTraceMultiByChannel(
 			Hits,				   //results
 			GetActorLocation(),    //start
-			GetActorLocation() + DirVector*BombRange, //end
+			GetActorLocation() + DirVector*BombRange*200.0f, //end
 			ECC_GameTraceChannel1, //collision channel
 			ExplosionTraceParams
 		);
@@ -71,7 +68,10 @@ void ABombBase::Explode_Implementation()
 			}
 		}
 	}
-	ExplosionParticleSystem->OnSystemFinished.AddDynamic(this, &ABombBase::OnFinished);
+	if (ExplosionParticleSystem->IsValidLowLevel())
+	{
+		ExplosionParticleSystem->OnSystemFinished.AddDynamic(this, &ABombBase::OnFinished);
+	}
 }
 
 void ABombBase::OnFinished(UParticleSystemComponent* PSystem)
