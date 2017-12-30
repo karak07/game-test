@@ -20,3 +20,4 @@ class BOMBERMAN_API UBombermanBFL : public UBlueprintFunctionLibrary
 	static FString FormatAsTime(int timeSeconds);
 	
 };
+

@@ -66,9 +66,10 @@ void APlayerBase::SpawnBomb()
 {
 	if (BombCount > 0 && !RemoteBomb)
 	{
-		FVector Location = GetActorLocation()+ GetActorForwardVector()*80.0f;
+		FVector Location = GetActorLocation() + GetActorForwardVector()*80.0f;
 		FRotator Rotate = FRotator();
 		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		SpawnInfo.Instigator = this;
 		ABombBase* SpawnedBomb;
 		if (RemoteDetonatorActive)
