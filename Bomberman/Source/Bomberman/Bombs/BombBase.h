@@ -32,7 +32,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Explode();
 
-public:
 	/** Broadcasts whenever the bomb explodes */
 	DECLARE_EVENT(ABombBase, FExplodedEvent)
 	FExplodedEvent& OnExploded() { return ExplodedEvent; }

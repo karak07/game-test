@@ -7,7 +7,7 @@
 APlayerBase::APlayerBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	ConstructorHelpers::FObjectFinder<UBlueprint> BPBomb(TEXT("Blueprint'/Game/BombermanBP/Blueprints/BP_Bomb.BP_Bomb'"));
 	NormalBombClass = BPBomb.Object->GeneratedClass;
 	ConstructorHelpers::FObjectFinder<UBlueprint> BPRemoteBomb(TEXT("Blueprint'/Game/BombermanBP/Blueprints/BP_RemoteBomb.BP_RemoteBomb'"));
@@ -66,10 +66,9 @@ void APlayerBase::SpawnBomb()
 {
 	if (BombCount > 0 && !RemoteBomb)
 	{
-		FVector Location = GetActorLocation() + GetActorForwardVector()*80.0f;
-		FRotator Rotate = FRotator();
+		FVector Location = GetActorLocation();
+		FRotator Rotate = FRotator::ZeroRotator;
 		FActorSpawnParameters SpawnInfo;
-		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		SpawnInfo.Instigator = this;
 		ABombBase* SpawnedBomb;
 		if (RemoteDetonatorActive)
