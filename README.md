@@ -1,4 +1,4 @@
-# game-test CHANGELIST:
+# game-test changelist:
 
 -initial commit, includes starter content
 
@@ -123,9 +123,14 @@ Total time spent: 16h
 GAME CONTROLS
 
 Player1: 
+
 W, A, S, D - Movement
+
 LeftShift - Place Bomb
 
+
 Player2: 
+
 I, K, J, L - Movement
+
 RightShift - Place Bomb
